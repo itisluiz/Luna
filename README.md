@@ -1,0 +1,35 @@
+# Luna
+Garry's Mod Lua state manipulator and dumper.
+
+## Filesystem
+Luna's folder will be created under `AppData\Local\Luna`
+
+## Features
+### **Lua dumper**
+Will dump scripts ran on your client Lua interface to `Luna\dump\serveraddress`
+
+### **Lua overrider**
+Will override scripts attemped to be run on your client their path path matches a file under `Luna\override\serveraddress` or `Luna\override\any`
+
+### **Lua executor**
+Will run Lua scripts in one of the game's Lua interfaces. Can handle literal string scripts or filenames, which can be absolute paths or relative to `Luna\userscripts`.
+
+## Commands
+### **luna_unload**
+Gracefully unloads luna
+
+### **luna_dump** *[opt enabled]*
+Client script dumper state
+
+- *enabled*: Optional, 0 for disabled or 1 for enabled. If not provided will show current setting.
+
+### **luna_override** *[opt enabled]*
+Client script overrider state
+
+- *enabled*: Optional, 0 for disabled or 1 for enabled. If not provided will show current setting.
+
+### **luna_run** *[state] [script]*
+Lua script executor
+
+- *state*: Lua state in which to run script (menu, client or server).
+- *script*: Lua script to run. If it is a path to an existing file (absolute or relative to userscripts), that file will be ran. Otherwise will be interpreted as a literal Lua script string.

@@ -1,0 +1,98 @@
+﻿{
+  "environments": [
+    {
+      "buildRoot": "${projectDir}\\out\\build\\${name}",
+      "installRoot": "${projectDir}\\out\\install\\${name}"
+    },
+    {
+      "namespace": "static_lib",
+      "msvc_linkage": "MultiThreaded$<$<CONFIG:Debug>:Debug>",
+      "x86_vcpkg_triplet": "x86-windows-static",
+      "x64_vcpkg_triplet": "x64-windows-static"
+    },
+    {
+      "namespace": "dynamic_lib",
+      "msvc_linkage": "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL",
+      "x86_vcpkg_triplet": "x86-windows",
+      "x64_vcpkg_triplet": "x64-windows"
+    }
+  ],
+  "configurations": [
+    {
+      "name": "x86 Debug",
+      "generator": "Ninja",
+      "configurationType": "Debug",
+      "inheritEnvironments": [ "msvc_x86_x64" ],
+      "variables": [
+        {
+          "name": "CMAKE_MSVC_RUNTIME_LIBRARY",
+          "value": "${static_lib.msvc_linkage}",
+          "type": "STRING"
+        },
+        {
+          "name": "VCPKG_TARGET_TRIPLET",
+          "value": "${static_lib.x86_vcpkg_triplet}",
+          "type": "STRING"
+        }
+      ],
+      "cmakeToolchain": "D:/Repositories/vcpkg/scripts/buildsystems/vcpkg.cmake"
+    },
+    {
+      "name": "x64 Debug",
+      "generator": "Ninja",
+      "configurationType": "Debug",
+      "inheritEnvironments": [ "msvc_x64_x64" ],
+      "variables": [
+        {
+          "name": "CMAKE_MSVC_RUNTIME_LIBRARY",
+          "value": "${static_lib.msvc_linkage}",
+          "type": "STRING"
+        },
+        {
+          "name": "VCPKG_TARGET_TRIPLET",
+          "value": "${static_lib.x64_vcpkg_triplet}",
+          "type": "STRING"
+        }
+      ],
+      "cmakeToolchain": "D:/Repositories/vcpkg/scripts/buildsystems/vcpkg.cmake"
+    },
+    {
+      "name": "x86 Release",
+      "generator": "Ninja",
+      "configurationType": "Release",
+      "inheritEnvironments": [ "msvc_x86_x64" ],
+      "variables": [
+        {
+          "name": "CMAKE_MSVC_RUNTIME_LIBRARY",
+          "value": "${static_lib.msvc_linkage}",
+          "type": "STRING"
+        },
+        {
+          "name": "VCPKG_TARGET_TRIPLET",
+          "value": "${static_lib.x86_vcpkg_triplet}",
+          "type": "STRING"
+        }
+      ],
+      "cmakeToolchain": "D:/Repositories/vcpkg/scripts/buildsystems/vcpkg.cmake"
+    },
+    {
+      "name": "x64 Release",
+      "generator": "Ninja",
+      "configurationType": "RelWithDebInfo",
+      "inheritEnvironments": [ "msvc_x64_x64" ],
+      "variables": [
+        {
+          "name": "CMAKE_MSVC_RUNTIME_LIBRARY",
+          "value": "${static_lib.msvc_linkage}",
+          "type": "STRING"
+        },
+        {
+          "name": "VCPKG_TARGET_TRIPLET",
+          "value": "${static_lib.x64_vcpkg_triplet}",
+          "type": "STRING"
+        }
+      ],
+      "cmakeToolchain": "D:/Repositories/vcpkg/scripts/buildsystems/vcpkg.cmake"
+    }
+  ]
+}
