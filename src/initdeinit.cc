@@ -20,6 +20,6 @@ bool init()
 
 void deinit()
 {
-	console << sdk::Color{ 200, 200, 200, 255 } << "Unloaded" "\n";
 	unloadHooks();
+	console << sdk::Color{ 200, 200, 200, 255 } << "Unloaded" "\n";
 }

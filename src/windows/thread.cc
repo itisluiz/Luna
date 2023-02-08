@@ -16,7 +16,7 @@ DWORD WINAPI mainThread(LPVOID)
 DWORD WINAPI unloadThread(LPVOID pExitCode)
 {
 	deinit();
-	Sleep(50);
+	Sleep(5);
 
 	FreeLibraryAndExitThread(hLibrary, *reinterpret_cast<DWORD*>(pExitCode));
 }

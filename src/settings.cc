@@ -4,6 +4,7 @@ namespace settings
 {
 	bool luaDump{ false };
 	bool luaOverride{ false };
+	std::string luaSafePaint;
 
 	namespace internals
 	{

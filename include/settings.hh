@@ -8,6 +8,7 @@ namespace settings
 {
 	extern bool luaDump;
 	extern bool luaOverride;
+	extern std::string luaSafePaint;
 
 	namespace internals
 	{

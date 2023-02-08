@@ -7,6 +7,7 @@
 #include <hooks/luarunstring.hh>
 #include <hooks/luarunstringex.hh>
 #include <hooks/insertcommand.hh>
+#include <hooks/viewrender.hh>
 
 using applyFn = MH_STATUS();
 
@@ -51,6 +52,9 @@ bool loadHooks()
 		return false;
 
 	if (!applyHook("insertcommand", hooks::insertcommand::apply))
+		return false;
+
+	if (!applyHook("viewrender", hooks::viewrender::apply))
 		return false;
 
 	mhResult = MH_EnableHook(MH_ALL_HOOKS);

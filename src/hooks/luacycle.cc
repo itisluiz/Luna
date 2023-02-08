@@ -27,7 +27,7 @@ namespace hooks::luacycle
 			lastInGame = curInGame;
 		}
 
-		features::luamanager::handleQueues(luaInterface);
+		features::luamanager::handleQueue(luaInterface);
 
 		return original(luaInterface);
 	}

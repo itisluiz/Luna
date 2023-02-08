@@ -28,6 +28,11 @@ Client script overrider state
 
 - *enabled*: Optional, 0 for disabled or 1 for enabled. If not provided will show current setting.
 
+### **luna_safepaint** *[opt hookname]*
+Safe 2D drawing hook for Lua scripts
+
+- *hookname*: Optional, 0 for disabled or name of the hook which will be called with `hook.Run` for drawing every frame. If not provided will show current setting. Drawing inside this hook will draw on top of everything else and cannot be captured (screen grabbed) from within Lua.
+
 ### **luna_run** *[state] [script]*
 Lua script executor
 

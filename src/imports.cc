@@ -6,6 +6,8 @@
 namespace imports
 {
 	sdk::IVEngineClient* iEngineClient;
+	sdk::IBaseClientDLL* iBaseClient;
+	sdk::ISurface* iSurface;
 	sdk::ILuaShared* iLuaShared;
 	sdk::luaL_loadstring* lua_loadstring;
 	sdk::luaL_loadfile* lua_loadfile;
@@ -90,6 +92,12 @@ static sdk::ILuaInterface* getLuaInterface(sdk::State state, size_t retryCount)
 bool loadImports()
 {
 	if (!acquireInterface(imports::iEngineClient, "engine.dll", ENGINECLIENT_IFACESTR))
+		return false;
+
+	if (!acquireInterface(imports::iBaseClient, "client.dll", BASECLIENT_IFACESTR))
+		return false;
+
+	if (!acquireInterface(imports::iSurface, "vguimatsurface.dll", MATSURFACE_IFACESTR))
 		return false;
 
 	if (!acquireInterface(imports::iLuaShared, "lua_shared.dll", LUASHARED_IFACESTR))

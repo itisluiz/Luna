@@ -5,6 +5,7 @@
 #include <commands/dump.hh>
 #include <commands/overrider.hh>
 #include <commands/run.hh>
+#include <commands/safepaint.hh>
 
 static std::map<std::string, commandCallbackFn*> registeredCommands;
 
@@ -71,4 +72,5 @@ void loadCommands()
 	registeredCommands.insert(commands::dump::commandPair());
 	registeredCommands.insert(commands::overrider::commandPair());
 	registeredCommands.insert(commands::run::commandPair());
+	registeredCommands.insert(commands::safepaint::commandPair());
 }

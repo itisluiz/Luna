@@ -11,8 +11,52 @@ namespace features::luamanager
 {
 	static const char* const stateName[sdk::State::STATE_MAX]{ "client", "server", "menu" };
 
-	static bool runScript(sdk::ILuaInterface* luaInterface, const std::string& script)
+	bool runHook(sdk::ILuaInterface* luaInterface, const std::string& hookName, size_t args)
 	{
+		if (!luaInterface)
+			return false;
+
+		luaInterface->GetField(sdk::SpecialField::INDEX_GLOBAL, "hook");
+		if (!luaInterface->IsType(-1, sdk::LuaType::lua_Table))
+		{
+			luaInterface->Pop();
+			return false;
+		}
+		
+		luaInterface->GetField(-1, "Run");
+		if (!luaInterface->IsType(-1, sdk::LuaType::lua_Function))
+		{
+			luaInterface->Pop(2);
+			return false;
+		}
+
+		luaInterface->Remove(-2);
+		if (args)
+			luaInterface->Insert(-1 - args);
+
+		luaInterface->PushString(hookName.c_str());
+		if (args)
+			luaInterface->Insert(-1 - args);
+
+		if (luaInterface->PCall(1 + args, -1, 0))
+		{
+			luaInterface->Pop(1);
+			return false;
+		}
+
+		return true;
+	}
+
+	bool runHook(sdk::State state, const std::string& hookName, size_t args)
+	{
+		return runHook(imports::iLuaShared->GetLuaInterface(state), hookName, args);
+	}
+
+	bool runScriptOrFile(sdk::ILuaInterface* luaInterface, const std::string& script, bool silent)
+	{
+		if (!luaInterface)
+			return false;
+
 		static std::optional<fs::path> path;
 
 		if (!path.has_value())
@@ -38,19 +82,24 @@ namespace features::luamanager
 				scriptAsPath = std::nullopt;
 		}
 
-		console << "Running script as " << (scriptAsPath.has_value() ? "file" : "string") << " on " << toState(luaInterface) << '\n';
+		if (!silent)
+			console << "Running script as " << (scriptAsPath.has_value() ? "file" : "string") << " on " << toState(luaInterface) << '\n';
 
 		if (scriptAsPath.has_value() && imports::lua_loadfile(luaInterface->state, scriptAsPath.value().string().c_str()) 
 			|| !scriptAsPath.has_value() && imports::lua_loadstring(luaInterface->state, script.c_str()))
 		{
-			console << "Lua error: " << sdk::Color{255, 100, 100, 255} << luaInterface->GetString() << '\n';
+			if (!silent)
+				console << "Lua error: " << sdk::Color{255, 100, 100, 255} << luaInterface->GetString() << '\n';
+
 			luaInterface->Pop();
 			return false;
 		}
 	
 		if (luaInterface->PCall(0, -1, 0))
 		{
-			console << "Lua run error: " << sdk::Color{ 255, 100, 100, 255 } << luaInterface->GetString() << '\n';
+			if (!silent)
+				console << "Lua run error: " << sdk::Color{ 255, 100, 100, 255 } << luaInterface->GetString() << '\n';
+
 			luaInterface->Pop();
 			return false;
 		}
@@ -58,7 +107,12 @@ namespace features::luamanager
 		return true;
 	}
 
-	void handleQueues(sdk::ILuaInterface* luaInterface)
+	bool runScriptOrFile(sdk::State state, const std::string& script, bool silent)
+	{
+		return runScriptOrFile(imports::iLuaShared->GetLuaInterface(state), script, silent);
+	}
+
+	void handleQueue(sdk::ILuaInterface* luaInterface)
 	{
 		sdk::State state{ toState(luaInterface) };
 
@@ -71,7 +125,7 @@ namespace features::luamanager
 			std::string& script{ scriptQueue.front() };
 
 			if (!script.empty())
-				runScript(luaInterface, script);
+				runScriptOrFile(luaInterface, script);
 
 			scriptQueue.pop();
 		}

@@ -7,6 +7,8 @@
 namespace imports
 {
 	extern sdk::IVEngineClient* iEngineClient;
+	extern sdk::IBaseClientDLL* iBaseClient;
+	extern sdk::ISurface* iSurface;
 	extern sdk::ILuaShared* iLuaShared;
 	extern sdk::luaL_loadstring* lua_loadstring;
 	extern sdk::luaL_loadfile* lua_loadfile;

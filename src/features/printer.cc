@@ -28,8 +28,11 @@ namespace features::printer
 			else if (m_newline)
 				prefix();
 		}
+		
+		sdk::ILuaInterface* menuInterface;
+		if (!imports::iLuaShared || !(menuInterface = imports::iLuaShared->GetLuaInterface(sdk::State::MENU)))
+			return;
 
-		sdk::ILuaInterface* menuInterface{ imports::iLuaShared->GetLuaInterface(sdk::State::MENU) };
 		menuInterface->MsgColour(m_color, msg.c_str());
 	}
 
