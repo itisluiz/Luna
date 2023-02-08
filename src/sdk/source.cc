@@ -22,7 +22,6 @@ namespace sdk
 #endif
 		}
 
-		console << *recordingMovie << '\n';
 		return *recordingMovie;
 	}
 
