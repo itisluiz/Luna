@@ -1,9 +1,8 @@
 #include <hooks/viewrender.hh>
+#include <features/luamanager.hh>
 #include <hooking.hh>
 #include <imports.hh>
 #include <settings.hh>
-#include <features/luamanager.hh>
-
 
 #define VTABLE_INDEX 26
 
@@ -15,13 +14,13 @@ namespace hooks::viewrender
 	{
 		bool result{ original(baseClient EDX_ARG rect) };
 
-		if (settings::luaSafePaint.empty() || imports::iEngineClient->IsTakingScreenshot() || imports::iEngineClient->IsRecordingMovie())
+		if (settings::luaSafePaintHk.empty() || imports::iEngineClient->IsTakingScreenshot() || imports::iEngineClient->IsRecordingMovie())
 			return result;
 
 		imports::iSurface->StartDrawing();
-		features::luamanager::runHook(sdk::State::CLIENT, settings::luaSafePaint);
+		features::luamanager::runHook(sdk::State::CLIENT, settings::luaSafePaintHk);
 		imports::iSurface->FinishDrawing();
-
+		
 		return result;
 	}
 

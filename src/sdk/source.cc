@@ -1,6 +1,6 @@
 #include <sdk/source.hh>
-#include <windows/pe.hh>
-#include <windows/pattern.hh>
+#include <memory/pe.hh>
+#include <memory/pattern.hh>
 #include <features/printer.hh>
 
 namespace sdk
@@ -24,6 +24,36 @@ namespace sdk
 
 		return *recordingMovie;
 	}
+
+	void IClientMode::sendPacket(bool sendpacket)
+	{
+		constexpr uint16_t noChokeInstruction{ 0x840F };
+		constexpr uint16_t chokeInstruction{ 0xE990 };
+
+		static uint16_t* instruction{ nullptr };
+
+		if (!instruction)
+		{
+			PESection section(".text", "engine.dll");
+#ifdef _WIN64
+			Pattern pattern("48 45 84 F6 0F 84", 4);
+#else
+			Pattern pattern("FF 50 ?? 84 DB 0F 84", 5);
+#endif
+			instruction = reinterpret_cast<uint16_t*>(pattern.locate(section.start(), section.end()));
+		}
+
+		if ((sendpacket && *instruction == noChokeInstruction) || (!sendpacket && *instruction == chokeInstruction))
+			return;
+
+		DWORD oldProtect, newProtect;
+		if (!VirtualProtect(instruction, 2, PAGE_EXECUTE_READWRITE, &oldProtect))
+			return;
+
+		*instruction = sendpacket ? noChokeInstruction : chokeInstruction;
+		VirtualProtect(instruction, 2, oldProtect, &newProtect);
+	}
+
 
 	void ISurface::StartDrawing()
 	{

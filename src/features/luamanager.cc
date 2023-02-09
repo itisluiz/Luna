@@ -11,23 +11,25 @@ namespace features::luamanager
 {
 	static const char* const stateName[sdk::State::STATE_MAX]{ "client", "server", "menu" };
 
-	bool runHook(sdk::ILuaInterface* luaInterface, const std::string& hookName, size_t args)
+	int runHook(sdk::ILuaInterface* luaInterface, const std::string& hookName, size_t args, size_t rets)
 	{
 		if (!luaInterface)
-			return false;
+			return -1;
+
+		int originalTop{ luaInterface->Top() };
 
 		luaInterface->GetField(sdk::SpecialField::INDEX_GLOBAL, "hook");
 		if (!luaInterface->IsType(-1, sdk::LuaType::lua_Table))
 		{
 			luaInterface->Pop();
-			return false;
+			return -1;
 		}
 		
 		luaInterface->GetField(-1, "Run");
 		if (!luaInterface->IsType(-1, sdk::LuaType::lua_Function))
 		{
 			luaInterface->Pop(2);
-			return false;
+			return -1;
 		}
 
 		luaInterface->Remove(-2);
@@ -40,16 +42,21 @@ namespace features::luamanager
 
 		if (luaInterface->PCall(1 + args, -1, 0))
 		{
-			luaInterface->Pop(1);
-			return false;
+			luaInterface->Pop();
+			return -1;
 		}
 
-		return true;
+		int returnCount{ luaInterface->Top() - originalTop + 1 };
+	
+		if (rets && returnCount > rets)
+			luaInterface->Pop(returnCount - rets);
+
+		return luaInterface->Top() - originalTop + 1;
 	}
 
-	bool runHook(sdk::State state, const std::string& hookName, size_t args)
+	int runHook(sdk::State state, const std::string& hookName, size_t args, size_t rets)
 	{
-		return runHook(imports::iLuaShared->GetLuaInterface(state), hookName, args);
+		return runHook(imports::iLuaShared->GetLuaInterface(state), hookName, args, rets);
 	}
 
 	bool runScriptOrFile(sdk::ILuaInterface* luaInterface, const std::string& script, bool silent)
@@ -94,7 +101,7 @@ namespace features::luamanager
 			luaInterface->Pop();
 			return false;
 		}
-	
+
 		if (luaInterface->PCall(0, -1, 0))
 		{
 			if (!silent)

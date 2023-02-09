@@ -33,6 +33,12 @@ Safe 2D drawing hook for Lua scripts
 
 - *hookname*: Optional, 0 for disabled or name of the hook which will be called with `hook.Run` for drawing every frame. If not provided will show current setting. Drawing inside this hook will draw on top of everything else and cannot be captured (screen grabbed) from within Lua.
 
+### **luna_clientmove** *[opt hookname]*
+Unrestricted CreateMove hook for Lua scripts
+
+- *hookname*: Optional, 0 for disabled or name of the hook which will be called with `hook.Run` for overriding createmove. If not provided will show current setting. The will pass a CUserCmd table with the following fields:
+  `command_number, tick_count, viewangles, forwardmove, sidemove, upmove, buttons, impulse, random_seed, mousedx, mousedy, hasbeenpredicted`. The hook may return a table with the keys and values to override in CUserCmd, a boolean representing bSendPacket and a boolean for overriding the return value of CreateMove, respectively.
+
 ### **luna_run** *[state] [script]*
 Lua script executor
 

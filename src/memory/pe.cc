@@ -1,4 +1,4 @@
-#include <windows/pe.hh>
+#include <memory/pe.hh>
 
 PESection::PESection(const std::string& sectionName, const HMODULE hModule)
 {

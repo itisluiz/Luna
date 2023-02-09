@@ -21,5 +21,6 @@ bool init()
 void deinit()
 {
 	unloadHooks();
+	sdk::IClientMode::sendPacket(true);
 	console << sdk::Color{ 200, 200, 200, 255 } << "Unloaded" "\n";
 }

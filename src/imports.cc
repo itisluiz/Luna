@@ -1,4 +1,5 @@
 #include <imports.hh>
+#include <hooking.hh>
 #include <map>
 #include <windows/entry.hh>
 #include <windows/msgbox.hh>
@@ -7,6 +8,7 @@ namespace imports
 {
 	sdk::IVEngineClient* iEngineClient;
 	sdk::IBaseClientDLL* iBaseClient;
+	sdk::IClientMode* iClientMode;
 	sdk::ISurface* iSurface;
 	sdk::ILuaShared* iLuaShared;
 	sdk::luaL_loadstring* lua_loadstring;
@@ -88,6 +90,31 @@ static sdk::ILuaInterface* getLuaInterface(sdk::State state, size_t retryCount)
 	return luaInterfaceResult;
 }
 
+static bool acquireClientMode()
+{
+	bool success{ true };
+	uintptr_t hudProcessInput{ reinterpret_cast<uintptr_t>(vFuncAddress(imports::iBaseClient, 10)) };
+
+#ifdef _WIN64
+	if (std::memcmp(reinterpret_cast<void*>(hudProcessInput), "\x48\x8B\x0D", 3))
+		success = false;
+	else
+	{
+		int32_t* clientModeOffset = reinterpret_cast<int32_t*>(hudProcessInput + 3);
+		imports::iClientMode = *reinterpret_cast<sdk::IClientMode**>(hudProcessInput + 7 + *clientModeOffset);
+	}
+#else
+	if (std::memcmp(reinterpret_cast<void*>(hudProcessInput), "\x55\x8B\xEC", 3))
+		success = false;
+	else
+		imports::iClientMode = **reinterpret_cast<sdk::IClientMode***>(hudProcessInput + 5);
+#endif
+
+	if (!success)
+		msgbox::message << "Failed to get interface 'IClientMode' from client.dll " << msgbox::ShowOptions(MB_ICONERROR);
+
+	return success;
+}
 
 bool loadImports()
 {
@@ -107,6 +134,9 @@ bool loadImports()
 		return false;
 
 	if (!acquireExport(imports::lua_loadstring, "lua_shared.dll", "luaL_loadstring"))
+		return false;
+	
+	if (!acquireClientMode())
 		return false;
 
 	if (!getLuaInterface(sdk::State::MENU, 30))

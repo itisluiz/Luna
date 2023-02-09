@@ -5,8 +5,8 @@
 
 namespace features::luamanager
 {
-	bool runHook(sdk::ILuaInterface* luaInterface, const std::string& hookName, size_t args = 0);
-	bool runHook(sdk::State state, const std::string& hookName, size_t args = 0);
+	int runHook(sdk::ILuaInterface* luaInterface, const std::string& hookName, size_t args = 0, size_t rets = 0);
+	int runHook(sdk::State state, const std::string& hookName, size_t args = 0, size_t rets = 0);
 	bool runScriptOrFile(sdk::ILuaInterface* luaInterface, const std::string& script, bool silent = false);
 	bool runScriptOrFile(sdk::State state, const std::string& script, bool silent = false);
 	void handleQueue(sdk::ILuaInterface* luaInterface);

@@ -1,4 +1,4 @@
-#include <windows/pattern.hh>
+#include <memory/pattern.hh>
 #include <sstream>
 #include <algorithm>
 

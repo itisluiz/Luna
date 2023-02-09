@@ -9,12 +9,12 @@ namespace commands::safepaint
 		if (tokens.size() >= 2)
 		{
 			if (tokens[1] == "0")
-				settings::luaSafePaint.clear();
+				settings::luaSafePaintHk.clear();
 			else
-				settings::luaSafePaint = tokens[1];
+				settings::luaSafePaintHk = tokens[1];
 		}
 
-		console << "Lua safepaint: " << (!settings::luaSafePaint.empty() ? sdk::Color{100, 255, 100, 255} : sdk::Color{255, 100, 100, 255}) << (!settings::luaSafePaint.empty() ? settings::luaSafePaint : "Off") << '\n';
+		console << "Lua safepaint: " << (!settings::luaSafePaintHk.empty() ? sdk::Color{100, 255, 100, 255} : sdk::Color{255, 100, 100, 255}) << (!settings::luaSafePaintHk.empty() ? settings::luaSafePaintHk : "Off") << '\n';
 	}
 
 	std::pair<std::string, decltype(&callback)> commandPair()

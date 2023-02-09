@@ -8,6 +8,7 @@
 #include <hooks/luarunstringex.hh>
 #include <hooks/insertcommand.hh>
 #include <hooks/viewrender.hh>
+#include <hooks/createmove.hh>
 
 using applyFn = MH_STATUS();
 
@@ -55,6 +56,9 @@ bool loadHooks()
 		return false;
 
 	if (!applyHook("viewrender", hooks::viewrender::apply))
+		return false;
+
+	if (!applyHook("createmove", hooks::createmove::apply))
 		return false;
 
 	mhResult = MH_EnableHook(MH_ALL_HOOKS);
