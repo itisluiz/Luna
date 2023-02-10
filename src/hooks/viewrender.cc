@@ -14,11 +14,11 @@ namespace hooks::viewrender
 	{
 		bool result{ original(baseClient EDX_ARG rect) };
 
-		if (settings::luaSafePaintHk.empty() || imports::iEngineClient->IsTakingScreenshot() || imports::iEngineClient->IsRecordingMovie())
+		if (settings::luaHkPaint.empty() || imports::iEngineClient->IsTakingScreenshot() || imports::iEngineClient->IsRecordingMovie())
 			return result;
 
 		imports::iSurface->StartDrawing();
-		features::luamanager::runHook(sdk::State::CLIENT, settings::luaSafePaintHk);
+		features::luamanager::runHook(sdk::State::CLIENT, settings::luaHkPaint);
 		imports::iSurface->FinishDrawing();
 		
 		return result;

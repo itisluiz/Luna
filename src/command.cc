@@ -5,8 +5,8 @@
 #include <commands/dump.hh>
 #include <commands/overrider.hh>
 #include <commands/run.hh>
-#include <commands/safepaint.hh>
-#include <commands/clientmove.hh>
+#include <commands/hkpaint.hh>
+#include <commands/hkcreatemove.hh>
 
 static std::map<std::string, commandCallbackFn*> registeredCommands;
 
@@ -73,6 +73,6 @@ void loadCommands()
 	registeredCommands.insert(commands::dump::commandPair());
 	registeredCommands.insert(commands::overrider::commandPair());
 	registeredCommands.insert(commands::run::commandPair());
-	registeredCommands.insert(commands::safepaint::commandPair());
-	registeredCommands.insert(commands::clientmove::commandPair());
+	registeredCommands.insert(commands::hkpaint::commandPair());
+	registeredCommands.insert(commands::hkcreatemove::commandPair());
 }

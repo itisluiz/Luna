@@ -4,8 +4,8 @@ namespace settings
 {
 	bool luaDump{ false };
 	bool luaOverride{ false };
-	std::string luaSafePaintHk;
-	std::string luaClientMoveHk;
+	std::string luaHkPaint;
+	std::string luaHkCreateMove;
 
 	namespace internals
 	{

@@ -16,7 +16,7 @@ namespace hooks::createmove
 		bool result{ original(clientMode EDX_ARG flInputSampleTime, cmd) };
 		sdk::ILuaInterface* clientInterface{ imports::iLuaShared->GetLuaInterface(sdk::State::CLIENT) };
 
-		if (!clientInterface || settings::luaClientMoveHk.empty())
+		if (!clientInterface || settings::luaHkCreateMove.empty())
 		{
 			clientMode->sendPacket(true);
 			return result;
@@ -61,7 +61,7 @@ namespace hooks::createmove
 			clientInterface->SetField(-2, "hasbeenpredicted");
 		}
 
-		int returnCount{ features::luamanager::runHook(clientInterface, settings::luaClientMoveHk, 1, 3) };
+		int returnCount{ features::luamanager::runHook(clientInterface, settings::luaHkCreateMove, 1, 3) };
 
 		if (returnCount > 0 && clientInterface->IsType(-returnCount, sdk::LuaType::lua_Table))
 		{
