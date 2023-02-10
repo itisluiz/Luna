@@ -28,6 +28,11 @@ Client script overrider state
 
 - *enabled*: Optional, 0 for disabled or 1 for enabled. If not provided will show current setting.
 
+### **luna_unrestrictcmd** *[opt enabled]*
+Allows lua to manipulate any ConVar, even cheat or non-lua created ones
+
+- *enabled*: Optional, 0 for disabled or 1 for enabled. If not provided will show current setting.
+  
 ### **luna_paint_hk** *[opt hookname]*
 Safe 2D drawing hook for Lua scripts
 

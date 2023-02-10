@@ -4,6 +4,7 @@ namespace settings
 {
 	bool luaDump{ false };
 	bool luaOverride{ false };
+	bool luaUnrestrictCmd{ false };
 	std::string luaHkPaint;
 	std::string luaHkCreateMove;
 

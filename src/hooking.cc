@@ -9,6 +9,7 @@
 #include <hooks/insertcommand.hh>
 #include <hooks/viewrender.hh>
 #include <hooks/createmove.hh>
+#include <hooks/luaeditcvar.hh>
 
 using applyFn = MH_STATUS();
 
@@ -59,6 +60,9 @@ bool loadHooks()
 		return false;
 
 	if (!applyHook("createmove", hooks::createmove::apply))
+		return false;
+
+	if (!applyHook("luaeditcvar", hooks::luaeditcvar::apply))
 		return false;
 
 	mhResult = MH_EnableHook(MH_ALL_HOOKS);

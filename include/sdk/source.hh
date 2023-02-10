@@ -97,6 +97,7 @@ namespace sdk
 		bool hasbeenpredicted;
 	};
 
+	using CVarDLLIdentifier_t = int;
 	using HeadtrackMovementMode_t = int;
 	using SurfaceFeature_e = int;
 	using FontDrawType_t = int;
@@ -105,6 +106,7 @@ namespace sdk
 	using HFont = unsigned long;
 	using HCursor = unsigned long;
 	using HTexture = unsigned long;
+	using FnChangeCallback_t = void(*)(void*, const char*, float);
 
 	using CreateInterface = void* (const char* name, int* returnCode);
 
@@ -163,6 +165,63 @@ namespace sdk
 		virtual void GetPacketResponseLatency(int flow, int frame_number, int* pnLatencyMsecs, int* pnChoke) const = 0;
 		virtual void GetRemoteFramerate(float* pflFrameTime, float* pflFrameTimeStdDeviation) const = 0;
 		virtual float GetTimeoutSeconds() const = 0;
+	};
+
+	class ConCommandBase
+	{
+	public:
+		ConCommandBase* m_pNext;
+		bool m_bRegistered;
+		const char* m_pszName;
+		const char* m_pszHelpString;
+		int m_nFlags;
+
+	public:
+		virtual ~ConCommandBase(void) = 0;
+		virtual	bool IsCommand(void) const = 0;
+		virtual bool IsFlagSet(int flag) const = 0;
+		virtual void AddFlags(int flags) = 0;
+		virtual const char* GetName(void) const = 0;
+		virtual const char* GetHelpText(void) const = 0;
+		virtual bool IsRegistered(void) const = 0;
+		virtual CVarDLLIdentifier_t	GetDLLIdentifier() const = 0;
+		virtual void CreateBase(const char* pName, const char* pHelpString = 0, int flags = 0) = 0;
+		virtual void Init() = 0;
+	};
+
+	class ConVar : public ConCommandBase
+	{
+	public:
+		ConVar* m_pParent;
+		const char* m_pszDefaultValue;
+		char* m_pszString;
+		int m_StringLength;
+		float m_fValue;
+		int m_nValue;
+		bool m_bHasMin;
+		float m_fMinVal;
+		bool m_bHasMax;
+		float m_fMaxVal;
+		FnChangeCallback_t m_fnChangeCallback;
+
+	public:
+		virtual ~ConVar(void) = 0;
+		virtual bool IsFlagSet(int flag) const = 0;
+		virtual const char* GetHelpText(void) const = 0;
+		virtual bool IsRegistered(void) const = 0;
+		virtual const char* GetName(void) const = 0;
+		virtual void AddFlags(int flags) = 0;
+		virtual	bool IsCommand(void) const = 0;
+		virtual void SetValue(const char* value) = 0;
+		virtual void SetValue(float value) = 0;
+		virtual void SetValue(int value) = 0;
+		virtual void InternalSetValue(const char* value) = 0;
+		virtual void InternalSetFloatValue(float fNewValue) = 0;
+		virtual void InternalSetIntValue(int nValue) = 0;
+		virtual bool ClampValue(float& value) = 0;
+		virtual void ChangeStringValue(const char* tempVal, float flOldValue) = 0;
+		virtual void Create(const char* pName, const char* pDefaultValue, int flags = 0, const char* pHelpString = 0, bool bMin = false, float fMin = 0.0, bool bMax = false, float fMax = false, FnChangeCallback_t callback = 0) = 0;
+		virtual void Init() = 0;
 	};
 
 	class IVEngineClient013

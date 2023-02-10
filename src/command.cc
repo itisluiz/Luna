@@ -7,6 +7,7 @@
 #include <commands/run.hh>
 #include <commands/hkpaint.hh>
 #include <commands/hkcreatemove.hh>
+#include <commands/unrestrictcmd.hh>
 
 static std::map<std::string, commandCallbackFn*> registeredCommands;
 
@@ -75,4 +76,5 @@ void loadCommands()
 	registeredCommands.insert(commands::run::commandPair());
 	registeredCommands.insert(commands::hkpaint::commandPair());
 	registeredCommands.insert(commands::hkcreatemove::commandPair());
+	registeredCommands.insert(commands::unrestrictcmd::commandPair());
 }

@@ -8,6 +8,7 @@ namespace settings
 {
 	extern bool luaDump;
 	extern bool luaOverride;
+	extern bool luaUnrestrictCmd;
 	extern std::string luaHkPaint;
 	extern std::string luaHkCreateMove;
 
