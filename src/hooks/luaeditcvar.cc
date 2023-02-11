@@ -3,7 +3,6 @@
 #include <memory/pe.hh>
 #include <memory/pattern.hh>
 #include <settings.hh>
-#include <features/printer.hh>
 
 #ifdef _WIN64
 #define CALLBACKFN_OFFSET 3
@@ -19,8 +18,6 @@ namespace hooks::luaeditcvar
 	{
 		if (!settings::luaUnrestrictCmd)
 			return original(cvar);
-
-		console << &cvar->m_fnChangeCallback << '\n';
 
 		if (!std::strcmp(cvar->m_pszName, "name"))
 			reinterpret_cast<uintptr_t*>(&cvar->m_fnChangeCallback)[CALLBACKFN_OFFSET] = 0;

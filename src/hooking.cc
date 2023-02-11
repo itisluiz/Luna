@@ -10,6 +10,7 @@
 #include <hooks/viewrender.hh>
 #include <hooks/createmove.hh>
 #include <hooks/luaeditcvar.hh>
+#include <hooks/luaruncmd.hh>
 
 using applyFn = MH_STATUS();
 
@@ -63,6 +64,9 @@ bool loadHooks()
 		return false;
 
 	if (!applyHook("luaeditcvar", hooks::luaeditcvar::apply))
+		return false;
+
+	if (!applyHook("luaruncmd", hooks::luaruncmd::apply))
 		return false;
 
 	mhResult = MH_EnableHook(MH_ALL_HOOKS);
