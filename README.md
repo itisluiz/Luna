@@ -1,3 +1,10 @@
+# Buiding
+* Install vcpkg
+* Install the minhook:x64-windows-static / minhook:x86-windows-static vcpkg packages
+* Open CMakeLists.txt with Visual Studio
+* You might need to specify the vckpg cmake toochain file
+* Build in the desired architecture
+
 # Luna
 Garry's Mod Lua state manipulator and dumper.
 
